@@ -1,5 +1,12 @@
 import React, { Component } from 'react';
-import { StyleSheet, Image, ImageBackground, TextInput, Alert, TouchableOpacity, Linking } from 'react-native';
+import {  StyleSheet,
+          Image,
+          ImageBackground,
+          TextInput,
+          Alert,
+          TouchableOpacity,
+          Linking,
+          LayoutAnimation } from 'react-native';
 import { Container, View, Text } from 'native-base'
 import { MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons';
 
@@ -54,10 +61,31 @@ const styles = StyleSheet.create({
     width: 45,
     marginTop: 80,
     alignSelf: 'center'
+  },
+  error: {
+    flexDirection: 'row',
+    marginTop: 15,
+    borderBottomColor: 'red',
+    borderBottomWidth: 1,
+    alignItems: 'center',
+    alignSelf: 'center',
+    marginBottom: 15
   }
 });
 
 export default class Login extends Component {
+
+  constructor() {
+    super()
+    this.state={
+      phoneNumber:'',
+      password:' ',
+      phoneNumberValidate:true,
+      passwordValidate:true,
+      lineWidth:1,
+      lineColor: 'red'
+    }
+  }
 
   _onLoginPressed() {
     Alert.alert('login tapped')
@@ -72,6 +100,37 @@ export default class Login extends Component {
       }
     });
   }
+
+  _onInputFieldFocus() {
+    LayoutAnimation.spring();
+    this.setState({lineWidth: 2, lineColor: 'red'})
+    Alert.alert('TextInput focused')
+  }
+
+  _onInputFieldEndEditing(){
+    LayoutAnimation.spring();
+    this.setState({lineWidth: 1, lineColor: '#4C77C4'})
+    Alert.alert('TextInput end editing')
+  }
+
+  validate(text, type) {
+    number=/^[0-9]+$/
+      if(type == 'phoneNumber') {
+        if((number.test(text) && text.length <= 10) || text.length == 0) {
+          this.setState({phoneNumberValidate: true})
+        } else {
+          Alert.alert('Phone number should be 10 digits')
+          this.setState({phoneNumberValidate: false})
+        }
+      } else if (type == 'password'){
+        if(number.test(text) && text.length <= 4) {
+          this.setState({passwordValidate: true})
+        } else {
+          Alert.alert('Password should be 4 digits')
+          this.setState({passwordValidate: false})
+        }
+    }
+  }
   render() {
     return(
         <ImageBackground source={require('../assets/LaunchImage.jpg')}
@@ -82,15 +141,19 @@ export default class Login extends Component {
             />
           </TouchableOpacity>
           <View style={styles.columnStyle}>
-            <View style={styles.rowStyle}>
+            <View style={[this.state.phoneNumberValidate?styles.rowStyle:styles.error]}>
               <FontAwesome name="user" size={30} color="#4C77C4" style={{marginRight: 10, marginLeft: 6}} />
               <TextInput style={styles.input}
+                onChangeText={(text)=>this.validate(text,'phoneNumber')}
                 placeholder="Phone Number"
               />
             </View>
-            <View style={styles.rowStyle}>
+            <View style={[this.state.passwordValidate ? [styles.rowStyle,{borderBottomWidth:this.state.lineWidth, borderBottomColor:this.state.lineColor}] : styles.error]}>
               <MaterialCommunityIcons name="key" size={30} color="#4C77C4" style={styles.imageRotate} />
                 <TextInput style={styles.input}
+                  onChangeText={(text)=>this.validate(text,'password')}
+                  onFocus={this._onInputFieldFocus}
+                  onEndEditing={this._onInputFieldEndEditing}
                   placeholder="Password"
                   secureTextEntry={true}
                 />
