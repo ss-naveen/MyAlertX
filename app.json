@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "login",
-    "slug": "Login",
+    "name": "myAlertX",
+    "slug": "myAlertX",
     "privacy": "public",
     "sdkVersion": "32.0.0",
     "platforms": [

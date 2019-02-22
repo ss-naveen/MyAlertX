@@ -82,9 +82,11 @@ export default class Login extends Component {
       password:' ',
       phoneNumberValidate:true,
       passwordValidate:true,
-      lineWidth:1,
-      lineColor: 'red'
+      lineHeight:1,
+      lineColor: '#4C77C4'
     }
+    this._onInputFieldFocus = this._onInputFieldFocus.bind(this)
+    this._onInputFieldEndEditing = this._onInputFieldEndEditing.bind(this)
   }
 
   _onLoginPressed() {
@@ -103,37 +105,49 @@ export default class Login extends Component {
 
   _onInputFieldFocus() {
     LayoutAnimation.spring();
-    this.setState({lineWidth: 2, lineColor: 'red'})
-    Alert.alert('TextInput focused')
+    this.setState({lineHeight: 2, lineColor: '#4C77C4'});
   }
 
-  _onInputFieldEndEditing(){
+  _onInputFieldEndEditing(type){
     LayoutAnimation.spring();
-    this.setState({lineWidth: 1, lineColor: '#4C77C4'})
-    Alert.alert('TextInput end editing')
+    this.setState({lineHeight: 1, lineColor: '#4C77C4'});
+
+    if(type == 'phoneNumber') {
+      console.log(type + ": " + "onEndEditing:" + this.state.phoneNumber + ":" + this.state.phoneNumber.length);
+      if (this.state.phoneNumber.length < 10 && this.state.phoneNumber.length > 0) {
+        Alert.alert('Phone number should be 10 digits')
+        this.setState({phoneNumberValidate: false})
+      }
+    } else if(type == 'password') {
+      console.log(type + ": " + "onEndEditing:" + this.state.password  + ":" + this.state.password.length);
+      if(this.state.password.length < 4 && this.state.password.length > 1) {
+        Alert.alert('Password should be 4 digits')
+        this.setState({passwordValidate: false})
+      }
+    }
   }
 
   validate(text, type) {
     number=/^[0-9]+$/
       if(type == 'phoneNumber') {
-        if((number.test(text) && text.length <= 10) || text.length == 0) {
-          this.setState({phoneNumberValidate: true})
+        if(number.test(text)) {
+          this.setState({phoneNumberValidate: true, phoneNumber:text})
         } else {
-          Alert.alert('Phone number should be 10 digits')
-          this.setState({phoneNumberValidate: false})
+          // Alert.alert('Phone number should be 10 digits')
+          this.setState({phoneNumberValidate: false,})
         }
       } else if (type == 'password'){
-        if(number.test(text) && text.length <= 4) {
-          this.setState({passwordValidate: true})
+        if(number.test(text)) {
+          this.setState({passwordValidate: true, password:text})
         } else {
-          Alert.alert('Password should be 4 digits')
-          this.setState({passwordValidate: false})
+          // Alert.alert('Password should be 4 digits')
+          this.setState({passwordValidate: false,})
         }
     }
   }
   render() {
     return(
-        <ImageBackground source={require('../assets/LaunchImage.jpg')}
+        <ImageBackground source={require('../assets/splash.png')}
           style={styles.backgroundImage}>
           <TouchableOpacity onPress={this._goToURL} style={styles.logoImage}>
             <Image style={{ width: 230, height: 110}}
@@ -141,21 +155,27 @@ export default class Login extends Component {
             />
           </TouchableOpacity>
           <View style={styles.columnStyle}>
-            <View style={[this.state.phoneNumberValidate?styles.rowStyle:styles.error]}>
+            <View style={[this.state.phoneNumberValidate ? [styles.rowStyle,{borderBottomWidth:this.state.lineHeight, borderBottomColor:this.state.lineColor}] : styles.error]}>
               <FontAwesome name="user" size={30} color="#4C77C4" style={{marginRight: 10, marginLeft: 6}} />
               <TextInput style={styles.input}
                 onChangeText={(text)=>this.validate(text,'phoneNumber')}
+                onFocus={this._onInputFieldFocus}
+                onEndEditing={()=>this._onInputFieldEndEditing('phoneNumber')}
                 placeholder="Phone Number"
+                keyboardType='numbers-and-punctuation'
+                maxLength={10}
               />
             </View>
-            <View style={[this.state.passwordValidate ? [styles.rowStyle,{borderBottomWidth:this.state.lineWidth, borderBottomColor:this.state.lineColor}] : styles.error]}>
+            <View style={[this.state.passwordValidate ? [styles.rowStyle,{borderBottomWidth:this.state.lineHeight, borderBottomColor:this.state.lineColor}] : styles.error]}>
               <MaterialCommunityIcons name="key" size={30} color="#4C77C4" style={styles.imageRotate} />
                 <TextInput style={styles.input}
                   onChangeText={(text)=>this.validate(text,'password')}
                   onFocus={this._onInputFieldFocus}
-                  onEndEditing={this._onInputFieldEndEditing}
+                  onEndEditing={()=>this._onInputFieldEndEditing('password')}
                   placeholder="Password"
                   secureTextEntry={true}
+                  keyboardType='numbers-and-punctuation'
+                  maxLength={4}
                 />
               </View>
             </View>
