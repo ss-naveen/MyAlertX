@@ -163,7 +163,7 @@ export default class Login extends Component {
                 onEndEditing={()=>this._onInputFieldEndEditing('phoneNumber')}
                 placeholder="Phone Number"
                 keyboardType='numbers-and-punctuation'
-                maxLength={10}
+                maxLength={10}                
               />
             </View>
             <View style={[this.state.passwordValidate ? [styles.rowStyle,{borderBottomWidth:this.state.lineHeight, borderBottomColor:this.state.lineColor}] : styles.error]}>
