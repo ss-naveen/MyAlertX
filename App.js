@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, Platform } from 'react-native';
 import { Permissions, Notifications, Location } from 'expo'
 
-import Login from './components/Login';
+import Login from './src/components/Login';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' +
@@ -17,10 +17,9 @@ export default class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      token:'',
-      location: null
+      
     }
-    this.registerForPushNotifications()
+    this.registerForPushNotifications()    
   }
 
   async registerForPushNotifications() {
@@ -32,12 +31,9 @@ export default class App extends React.Component {
         return;
       }
     }
-  
-    const token = await Notifications.getExpoPushTokenAsync();
-  
+    const token = await Notifications.getExpoPushTokenAsync();  
     this.subscription = Notifications.addListener(this.handleNotification);
-  
-    this.setState({ token });
+    global.token = token
   }
 
   _getLocationAsync = async () => {
@@ -49,6 +45,7 @@ export default class App extends React.Component {
     }
     let location = await Location.getCurrentPositionAsync({});
     this.setState({ location });
+    global.location = location
   }
 
   render() {
