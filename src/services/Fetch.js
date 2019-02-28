@@ -11,12 +11,12 @@ export const processFetchRequest = (url, method, input) => {
             },
             body: input
         })
-}
-
-
-export const getUserInfo = (name) => {
-    let username = name.toLowerCase().trim();
-    const URL = `https://api.github.com/users/${username}`;
-    return fetch(URL)
-            .then((res) => res.json());
+        .then((response) => response.json)
+        .then((responseJson) => {
+            return responseJson
+        })
+        .catch((error) => {
+            console.log(error);            
+        });
+    
 }

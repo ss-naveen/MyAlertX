@@ -9,6 +9,7 @@ import {  StyleSheet,
           LayoutAnimation } from 'react-native';
 import { Container, View, Text } from 'native-base'
 import { MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons';
+import { loginUser } from '../services/LoginRequest.js'
 
 const styles = StyleSheet.create({
 
@@ -91,6 +92,10 @@ export default class Login extends Component {
 
   _onLoginPressed() {
     Alert.alert('login tapped')
+    loginUser(this.state.phoneNumber, this.state.password)
+    .then((res) =>{
+
+    });
   }
   _goToURL() {
     let url = 'http://google.com'
@@ -147,11 +152,11 @@ export default class Login extends Component {
   }
   render() {
     return(
-        <ImageBackground source={require('../assets/splash.png')}
+        <ImageBackground source={require('../../assets/splash.png')}
           style={styles.backgroundImage}>
           <TouchableOpacity onPress={this._goToURL} style={styles.logoImage}>
             <Image style={{ width: 230, height: 110}}
-              source={require('../assets/LoginBGLogo.png')}
+              source={require('../../assets/LoginBGLogo.png')}
             />
           </TouchableOpacity>
           <View style={styles.columnStyle}>
@@ -182,7 +187,7 @@ export default class Login extends Component {
           <TouchableOpacity onPress={this._onLoginPressed} style={styles.button}>
             <Image
               style={{ width: 45, height: 45}}
-              source={require('../assets/accept_circle.png')}
+              source={require('../../assets/accept_circle.png')}
             />
           </TouchableOpacity>
           <View style={{alignSelf:'center', position: "absolute", bottom: 30}}>
