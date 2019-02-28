@@ -1,9 +1,9 @@
 
 import GLOBAL from '../component/Constants.js';
+import { processFetchRequest } from './Fetch.js'
 
 
-function loginUser(data) {
-    return new Promise((resolve, reject) => {
-        fetch(GLOBAL.LOGIN_URL)
-    })
+function loginUser(phoneNumber, password) {
+    
+    processFetchRequest(GLOBAL.LOGIN_URL,'POST')
 }
