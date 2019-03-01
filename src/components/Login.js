@@ -88,14 +88,11 @@ export default class Login extends Component {
     }
     this._onInputFieldFocus = this._onInputFieldFocus.bind(this)
     this._onInputFieldEndEditing = this._onInputFieldEndEditing.bind(this)
+    this._onLoginPressed = this._onLoginPressed.bind(this)
   }
 
-  _onLoginPressed() {
-    Alert.alert('login tapped')
-    loginUser(this.state.phoneNumber, this.state.password)
-    .then((res) =>{
-
-    });
+  _onLoginPressed() {  
+    loginUser(this.state.phoneNumber, this.state.password);
   }
   _goToURL() {
     let url = 'http://google.com'
@@ -135,15 +132,15 @@ export default class Login extends Component {
   validate(text, type) {
     number=/^[0-9]+$/
       if(type == 'phoneNumber') {
-        if(number.test(text)) {
-          this.setState({phoneNumberValidate: true, phoneNumber:text})
+        if(number.test(text)) {                    
+          this.setState({ phoneNumberValidate: true, phoneNumber:text })          
         } else {
           // Alert.alert('Phone number should be 10 digits')
           this.setState({phoneNumberValidate: false,})
         }
       } else if (type == 'password'){
         if(number.test(text)) {
-          this.setState({passwordValidate: true, password:text})
+          this.setState({ passwordValidate: true, password:text })
         } else {
           // Alert.alert('Password should be 4 digits')
           this.setState({passwordValidate: false,})

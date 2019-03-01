@@ -1,4 +1,4 @@
-import GLOBAL from '../component/Constants.js';
+import GLOBAL from '../components/Constants';
 
 export const processFetchRequest = (url, method, input) => {
     const URL = GLOBAL.BASE_URL + url;
@@ -13,6 +13,8 @@ export const processFetchRequest = (url, method, input) => {
         })
         .then((response) => response.json)
         .then((responseJson) => {
+            // console.warn(responseJson);
+            
             return responseJson
         })
         .catch((error) => {

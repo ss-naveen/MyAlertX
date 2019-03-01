@@ -1,9 +1,15 @@
 
-import GLOBAL from '../component/Constants.js';
+import GLOBAL from '../components/Constants';
 import { processFetchRequest } from './Fetch.js'
 
 
-function loginUser(phoneNumber, password) {
-    
-    processFetchRequest(GLOBAL.LOGIN_URL,'POST')
+export const loginUser = (phoneNumber, password) => {
+    console.log(global.token);    
+    processFetchRequest(GLOBAL.LOGIN_URL, 
+                        'POST', 
+                        JSON.stringify({'MobileNo':phoneNumber, 'password':password, 'IOSDeviceId':global.token}))
+    .then((response) =>{
+        // console.warn(response);        
+        return response
+    })
 }
