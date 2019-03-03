@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Platform } from 'react-native';
 import { Permissions, Notifications, Location } from 'expo'
 
 import Login from './src/components/Login';
+import './src/services/Global'
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' +
@@ -45,7 +46,7 @@ export default class App extends React.Component {
     }
     let location = await Location.getCurrentPositionAsync({});
     this.setState({ location });
-    global.location = location
+    global.location = location    
   }
 
   render() {

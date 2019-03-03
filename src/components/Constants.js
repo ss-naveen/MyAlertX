@@ -1,4 +1,3 @@
-module.export = {
-    BASE_URL: 'http://smartbuyuat.xinthe.com:88/api',
-    LOGIN_URL: '/UserLogin/Login'
-}
+
+global.BASE_URL = 'http://smartbuyuat.xinthe.com:88/api',
+global.LOGIN_URL = '/UserLogin/Login'

@@ -6,73 +6,12 @@ import {  StyleSheet,
           Alert,
           TouchableOpacity,
           Linking,
-          LayoutAnimation } from 'react-native';
-import { Container, View, Text } from 'native-base'
+          LayoutAnimation,
+          Keyboard } from 'react-native';
+import { View, Text } from 'native-base'
 import { MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons';
-import { loginUser } from '../services/LoginRequest.js'
-
-const styles = StyleSheet.create({
-
-  logoImage: {
-    width:230,
-    height:110,
-    marginTop: 80,
-    alignSelf: 'center'
-  },
-  input: {
-    height: 40,
-    width: '80%',
-    fontSize: 18
-  },
-  container: {
-    flex:1,
-    flexDirection: 'column',
-    backgroundColor: null,
-    alignItems: 'center'
-  },
-  rowStyle: {
-    flexDirection: 'row',
-    marginTop: 15,
-    borderBottomColor: '#4C77C4',
-    borderBottomWidth: 1,
-    alignItems: 'center',
-    alignSelf: 'center',
-    marginBottom: 15
-  },
-  columnStyle: {
-    marginTop: 80,
-    alignSelf: 'center',
-    alignItems: 'center',
-    width: 350,
-    backgroundColor: 'rgba(235,235,241,0.6)',
-    borderRadius: 8
-  },
-  imageRotate: {
-    transform: [{ rotate: '90deg'}],
-    marginRight: 10,
-  },
-
-  backgroundImage: {
-    width: '100%',
-    height: '100%',
-    resizeMode: 'cover'
-  },
-  button: {
-    height: 45,
-    width: 45,
-    marginTop: 80,
-    alignSelf: 'center'
-  },
-  error: {
-    flexDirection: 'row',
-    marginTop: 15,
-    borderBottomColor: 'red',
-    borderBottomWidth: 1,
-    alignItems: 'center',
-    alignSelf: 'center',
-    marginBottom: 15
-  }
-});
+import { loginUser } from '../services/LoginRequest.js';
+import styles from '../CSS/LoginCss';
 
 export default class Login extends Component {
 
@@ -92,7 +31,26 @@ export default class Login extends Component {
   }
 
   _onLoginPressed() {  
-    loginUser(this.state.phoneNumber, this.state.password);
+    Keyboard.dismiss()
+    loginUser(this.state.phoneNumber, this.state.password)
+    .then(result =>{
+      console.log(result);      
+    })
+    .catch((error) => {
+      console.log(error);      
+    });
+
+    // processFetchRequest(global.LOGIN_URL, 'POST', 
+    //   JSON.stringify({'MobileNo':phoneNumber, 'password':password, 'IOSDeviceId':global.token}))
+    // .then((response) =>{
+    //   // console.warn(response);        
+    //     return response
+    // })
+    // .catch((error) =>{
+
+    // });
+
+
   }
   _goToURL() {
     let url = 'http://google.com'
