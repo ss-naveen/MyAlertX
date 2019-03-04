@@ -39,7 +39,6 @@ export default class Login extends Component {
         AsyncStorage.setItem("userData",JSON.stringify(response.entity))
         .then( ()=>{
           Alert.alert("Saved Successfully")
-          this._getLocalData(1000)
         })
         .catch((error) =>{
           Alert.alert(error)
@@ -48,27 +47,8 @@ export default class Login extends Component {
         Alert.alert("User name or password is incorrect");
       }
     })
-    .catch((error) => {
-      // console.log("Error:" + error);      
+    .catch((error) => {      
     });
-
-    // processFetchRequest(global.LOGIN_URL, 'POST', 
-    //   JSON.stringify({'MobileNo':phoneNumber, 'password':password, 'IOSDeviceId':global.token}))
-    // .then((response) =>{
-    //   // console.warn(response);        
-    //     return response
-    // })
-    // .catch((error) =>{
-
-    // });
-
-
-  }
-
-  _getLocalData() {
-    AsyncStorage.getItem("userData").then((value) =>{
-      console.log("Local Storage:-" + value);      
-    }).done();
   }
 
   _goToURL() {
