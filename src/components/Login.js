@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {  StyleSheet,
+import {  AsyncStorage,
           Image,
           ImageBackground,
           TextInput,
@@ -32,12 +32,24 @@ export default class Login extends Component {
 
   _onLoginPressed() {  
     Keyboard.dismiss()
-    loginUser(this.state.phoneNumber, this.state.password)
-    .then(result =>{
-      console.log(result);      
+    loginUser(this.state.phoneNumber, this.state.password) 
+    .then((response) =>{ 
+      
+      if(response.statusCode == 1) {        
+        AsyncStorage.setItem("userData",JSON.stringify(response.entity))
+        .then( ()=>{
+          Alert.alert("Saved Successfully")
+          this._getLocalData(1000)
+        })
+        .catch((error) =>{
+          Alert.alert(error)
+        });        
+      } else {
+        Alert.alert("User name or password is incorrect");
+      }
     })
     .catch((error) => {
-      console.log(error);      
+      // console.log("Error:" + error);      
     });
 
     // processFetchRequest(global.LOGIN_URL, 'POST', 
@@ -52,6 +64,13 @@ export default class Login extends Component {
 
 
   }
+
+  _getLocalData() {
+    AsyncStorage.getItem("userData").then((value) =>{
+      console.log("Local Storage:-" + value);      
+    }).done();
+  }
+
   _goToURL() {
     let url = 'http://google.com'
     Linking.canOpenURL(url).then(supported => {
@@ -73,13 +92,13 @@ export default class Login extends Component {
     this.setState({lineHeight: 1, lineColor: '#4C77C4'});
 
     if(type == 'phoneNumber') {
-      console.log(type + ": " + "onEndEditing:" + this.state.phoneNumber + ":" + this.state.phoneNumber.length);
+      // console.log(type + ": " + "onEndEditing:" + this.state.phoneNumber + ":" + this.state.phoneNumber.length);
       if (this.state.phoneNumber.length < 10 && this.state.phoneNumber.length > 0) {
         Alert.alert('Phone number should be 10 digits')
         this.setState({phoneNumberValidate: false})
       }
     } else if(type == 'password') {
-      console.log(type + ": " + "onEndEditing:" + this.state.password  + ":" + this.state.password.length);
+      // console.log(type + ": " + "onEndEditing:" + this.state.password  + ":" + this.state.password.length);
       if(this.state.password.length < 4 && this.state.password.length > 1) {
         Alert.alert('Password should be 4 digits')
         this.setState({passwordValidate: false})

@@ -2,7 +2,7 @@ import './Global'
 
 export const processFetchRequest = (url, method, input) => {
     const URL = global.BASE_URL + url;
-    console.warn(URL, method, input);
+    // console.warn(URL, method, input);
     
     return fetch(
         URL, {
@@ -17,6 +17,7 @@ export const processFetchRequest = (url, method, input) => {
         })
         .then((response) => response.json())
         .then((responseJson) =>{
+            console.log(responseJson);            
             return responseJson            
         })
         .catch((error) => {
