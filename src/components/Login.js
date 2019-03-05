@@ -8,13 +8,23 @@ import {  AsyncStorage,
           Linking,
           LayoutAnimation,
           Keyboard,
-          ActivityIndicatorIOS } from 'react-native';
+          ActivityIndicator } from 'react-native';
 import { View, Text } from 'native-base'
 import { MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons';
+import { createStackNavigator, createAppContainer } from 'react-navigation';
+
 import { loginUser } from '../services/LoginRequest.js';
 import styles from '../CSS/LoginCss';
 import loadingStyles from '../CSS/LoadingCss';
 import Home from './Home'
+
+const RootStack = createStackNavigator(
+  {    
+    Home: Home,
+  }
+);
+
+const AppContainer = createAppContainer(RootStack);
 
 export default class Login extends Component {
 
@@ -27,7 +37,7 @@ export default class Login extends Component {
       passwordValidate:true,
       lineHeight:1,
       lineColor: '#4C77C4',
-      loading: false
+      isLoading: false
     }
     this._onInputFieldFocus = this._onInputFieldFocus.bind(this)
     this._onInputFieldEndEditing = this._onInputFieldEndEditing.bind(this)
@@ -36,18 +46,19 @@ export default class Login extends Component {
 
   _onLoginPressed() {  
     Keyboard.dismiss()
-    this.setState({ loading:true });
+    this.setState({ isLoading:true });
+    setTimeout(() => {
     loginUser(this.state.phoneNumber, this.state.password) 
-    .then((response) =>{ 
-      
+    .then((response) =>{       
       if(response.statusCode == 1) {        
         AsyncStorage.setItem("userData",JSON.stringify(response.entity))
         .then( ()=>{
-          Alert.alert("Saved Successfully")
-          this.setState({ loading: false });
-          this.props.navigator.immediatlyResetRouteStack([{
-            component: Home
-          }]);
+          Alert.alert("Login Success")
+          this.setState({ isLoading: false });
+          this.props.navigation.push('Home');
+          // this.props.navigator.immediatlyResetRouteStack([{
+          //   component: Home
+          // }]);
         })
         .catch((error) =>{
           Alert.alert(error)
@@ -58,6 +69,7 @@ export default class Login extends Component {
     })
     .catch((error) => {      
     });
+  }, 2000) 
   }
 
   _goToURL() {
@@ -143,15 +155,18 @@ export default class Login extends Component {
   }
 
   render() {
+    const {isLoading} = this.state;
+
     return(
         <ImageBackground source={require('../../assets/splash.png')}
           style={styles.backgroundImage}>
-          <View style={this._containerStyle()}>
+
+          {/* <View style={this._containerStyle()}>
             <View style={loadingStyles.spinnerContainer}>
               {this._activityindicator()}
               {this._loadingText()}
             </View>
-          </View>
+          </View> */}          
           <TouchableOpacity onPress={this._goToURL} style={styles.logoImage}>
             <Image style={{ width: 230, height: 110}}
               source={require('../../assets/LoginBGLogo.png')}
@@ -193,6 +208,11 @@ export default class Login extends Component {
               <Text> Also visit our website </Text>
               <Text style={{ color: '#4C77C4'}} onPress={this._goToURL}>here</Text>
             </Text>
+          </View>
+          <View style={loadingStyles.container}>
+            { isLoading && ( 
+              <ActivityIndicator  style={loadingStyles.loadingContainer}/>
+            )}
           </View>
         </ImageBackground>
     );

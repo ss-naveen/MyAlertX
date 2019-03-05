@@ -2,6 +2,8 @@ import './Global'
 
 export const processFetchRequest = (url, method, input) => {
     const URL = global.BASE_URL + url;    
+    console.log(URL);
+    console.log(input);        
     return fetch(
         URL, {
             method: method,
