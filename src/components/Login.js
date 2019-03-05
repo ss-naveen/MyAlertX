@@ -7,11 +7,14 @@ import {  AsyncStorage,
           TouchableOpacity,
           Linking,
           LayoutAnimation,
-          Keyboard } from 'react-native';
+          Keyboard,
+          ActivityIndicatorIOS } from 'react-native';
 import { View, Text } from 'native-base'
 import { MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons';
 import { loginUser } from '../services/LoginRequest.js';
 import styles from '../CSS/LoginCss';
+import loadingStyles from '../CSS/LoadingCss';
+import Home from './Home'
 
 export default class Login extends Component {
 
@@ -23,7 +26,8 @@ export default class Login extends Component {
       phoneNumberValidate:true,
       passwordValidate:true,
       lineHeight:1,
-      lineColor: '#4C77C4'
+      lineColor: '#4C77C4',
+      loading: false
     }
     this._onInputFieldFocus = this._onInputFieldFocus.bind(this)
     this._onInputFieldEndEditing = this._onInputFieldEndEditing.bind(this)
@@ -32,6 +36,7 @@ export default class Login extends Component {
 
   _onLoginPressed() {  
     Keyboard.dismiss()
+    this.setState({ loading:true });
     loginUser(this.state.phoneNumber, this.state.password) 
     .then((response) =>{ 
       
@@ -39,6 +44,10 @@ export default class Login extends Component {
         AsyncStorage.setItem("userData",JSON.stringify(response.entity))
         .then( ()=>{
           Alert.alert("Saved Successfully")
+          this.setState({ loading: false });
+          this.props.navigator.immediatlyResetRouteStack([{
+            component: Home
+          }]);
         })
         .catch((error) =>{
           Alert.alert(error)
@@ -104,10 +113,45 @@ export default class Login extends Component {
         }
     }
   }
+
+  _containerStyle() {
+    let {text} = this.props;
+    if (text && (text.length > 7)) {
+        return loadingStyles.loadingContainerAutoSize;
+    } else {
+        return loadingStyles.loadingContainer;
+    }
+  }
+
+  _activityindicator() {
+    let showLoading = this.props.showLoading;
+    if (showLoading) {
+        return (<ActivityIndicatorIOS
+            animating={true}
+            size='large'
+        />);
+    }
+    return null;
+  }
+
+  _loadingText() {
+    if (this.props.text) {
+        return (<Text style={loadingStyles.loadingText} >{this.props.text} </Text> );
+    } else {
+        return;
+    }
+  }
+
   render() {
     return(
         <ImageBackground source={require('../../assets/splash.png')}
           style={styles.backgroundImage}>
+          <View style={this._containerStyle()}>
+            <View style={loadingStyles.spinnerContainer}>
+              {this._activityindicator()}
+              {this._loadingText()}
+            </View>
+          </View>
           <TouchableOpacity onPress={this._goToURL} style={styles.logoImage}>
             <Image style={{ width: 230, height: 110}}
               source={require('../../assets/LoginBGLogo.png')}

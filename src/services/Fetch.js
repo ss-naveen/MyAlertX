@@ -14,7 +14,8 @@ export const processFetchRequest = (url, method, input) => {
             body: input
         })
         .then((response) => response.json())
-        .then((responseJson) =>{            
+        .then((responseJson) =>{     
+            console.log(responseJson);
             return responseJson            
         })
         .catch((error) => {            
