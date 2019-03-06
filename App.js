@@ -4,6 +4,12 @@ import { Permissions, Notifications, Location } from 'expo'
 
 import Login from './src/components/Login';
 import './src/services/Global'
+import { createStackNavigator, createAppContainer } from 'react-navigation';
+import NavigationService from './NavigationService';
+
+const TopLevelNavigator = createStackNavigator({ /* ... */ })
+
+const AppContainer = createAppContainer(TopLevelNavigator);
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' +
@@ -51,9 +57,14 @@ export default class App extends React.Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <Login />
-      </View>
+      // <View style={styles.container}>
+      //   <Login />
+      // </View>
+      <AppContainer
+        ref={navigatorRef => {
+          NavigationService.setTopLevelNavigator(navigatorRef);
+        }}
+      />
     );
   }
 }

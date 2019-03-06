@@ -12,6 +12,7 @@ import {  AsyncStorage,
 import { View, Text } from 'native-base'
 import { MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons';
 import { createStackNavigator, createAppContainer } from 'react-navigation';
+import NavigationService from './NavigationService';
 
 import { loginUser } from '../services/LoginRequest.js';
 import styles from '../CSS/LoginCss';
@@ -55,7 +56,8 @@ export default class Login extends Component {
         .then( ()=>{
           Alert.alert("Login Success")
           this.setState({ isLoading: false });
-          this.props.navigation.push('Home');
+          NavigationService.navigate('Home')
+          // this.props.navigation.push('Home');
           // this.props.navigator.immediatlyResetRouteStack([{
           //   component: Home
           // }]);
@@ -69,7 +71,7 @@ export default class Login extends Component {
     })
     .catch((error) => {      
     });
-  }, 2000) 
+  }, 1000) 
   }
 
   _goToURL() {
@@ -209,11 +211,11 @@ export default class Login extends Component {
               <Text style={{ color: '#4C77C4'}} onPress={this._goToURL}>here</Text>
             </Text>
           </View>
-          <View style={loadingStyles.container}>
+          {/* <View style={loadingStyles.container}>
             { isLoading && ( 
               <ActivityIndicator  style={loadingStyles.loadingContainer}/>
             )}
-          </View>
+          </View> */}
         </ImageBackground>
     );
   }
